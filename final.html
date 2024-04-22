@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form with Light Button</title>
+
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            background: linear-gradient(#141e30, #2a6c56);
+            height: 100vh;
+        }
+
+        .calculator {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 8px 8px 8px black;
+        }
+
+        .display {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            height: 140px;
+            padding: 5px;
+            margin-bottom: 15px;
+            text-align: end;
+        }
+
+        .input {
+            margin-top: 5px;
+            font-size: 26px;
+        }
+
+        .output {
+            font-size: 18px;
+        }
+
+        .theme-toggler {
+            background: linear-gradient(to right, rgb(37, 36, 36), white);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        .theme-toggler:hover {
+            transform: scale(1.2);
+            transition: 0.3s ease-in-out;
+            cursor: pointer;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-row-gap: 10px;
+            grid-column-gap: 10px;
+        }
+
+        button {
+            font-size: 24px;
+            height: 60px;
+            width: 60px;
+            border-radius: 50%;
+        }
+
+        .grid button:hover {
+            font-weight: bold;
+            font-size: 28px;
+            transition: 0.3s ease-in-out;
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+
+        @keyframes small {
+            0% {
+                font-size: 26px;
+            }
+
+            100% {
+                font-size: 18px;
+            }
+        }
+
+        @keyframes big {
+            0% {
+                font-size: 18px;
+            }
+
+            100% {
+                font-size: 28px;
+            }
+        }
+
+        .logout {
+            font-size: 18px;
+            height: 60px;
+            width: 60px;
+            border-radius: 50%;
+        }
+
+        .grid .logout:hover {
+            font-weight: bold;
+            font-size: 14px;
+            transition: 0.3s ease-in-out;
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+
+        /* Dark Theme */
+
+        .calculator {
+            transition: 0.3s ease-in-out;
+            background: rgb(8, 4, 30);
+        }
+
+        .calculator .display {
+            color: white;
+        }
+
+        .calculator button {
+            background-color: rgb(63, 63, 121);
+            color: white;
+        }
+
+        .calculator button.erase {
+            background-color: rgb(87, 10, 10);
+            color: rgb(199, 30, 30);
+        }
+
+        .calculator button.operation {
+            background-color: rgb(62, 8, 62);
+            color: rgb(154, 23, 154);
+        }
+
+        .calculator button.equal {
+            background-color: rgb(16, 67, 16);
+            color: white;
+        }
+
+        /* Light Theme */
+
+        .calculator.light {
+            background: rgb(222, 210, 210);
+        }
+
+        .calculator.light .display {
+            color: black;
+        }
+
+        .calculator.light button {
+            background-color: #c3eaff;
+            color: #000000;
+        }
+
+        .calculator.light button.erase {
+            background-color: rgb(193, 21, 21);
+            color: rgb(91, 23, 23);
+        }
+
+        .calculator.light button.operation {
+            background-color: rgb(193, 22, 193);
+            color: rgb(94, 14, 94);
+        }
+
+        .calculator.light button.equal {
+            background-color: rgb(28, 183, 28);
+            color: white;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            background: linear-gradient(#141e30, #2a6c56);
+        }
+
+        .login-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            padding: 40px;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.5);
+            box-sizing: border-box;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+        }
+
+        .login-box h2 {
+            margin: 0 0 30px;
+            padding: 0;
+            color: #fff;
+            text-align: center;
+        }
+
+        .login-box .user-box {
+            position: relative;
+        }
+
+        .login-box .user-box input {
+            width: 100%;
+            padding: 10px 0;
+            font-size: 16px;
+            color: #fff;
+            margin-bottom: 30px;
+            outline: none;
+            background: transparent;
+        }
+
+        .login-box .user-box label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 10px 0;
+            font-size: 16px;
+            color: #fff;
+            pointer-events: none;
+            transition: 0.5s;
+        }
+
+        .login-box .user-box input:focus~label,
+        .login-box .user-box input:valid~label {
+            top: -20px;
+            left: 0;
+            color: #03f484;
+            font-size: 12px;
+        }
+
+        .login-box form a {
+            position: relative;
+            display: inline-block;
+            padding: 10px 20px;
+            color: #03f484;
+            font-size: 16px;
+            text-decoration: none;
+            text-transform: uppercase;
+            overflow: hidden;
+            transition: 0.5s;
+            margin-top: 40px;
+            letter-spacing: 4px;
+        }
+
+        .login-box a:hover {
+            background: #03f484;
+            color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 5px #03f484, 0 0 25px #03f484, 0 0 50px #03f484, 0 0 100px #03f484;
+        }
+
+        .login-btn {
+        display: block;
+        width: 200px;
+        height: 40px;
+        left: 55px;
+        line-height: 40px;
+        font-size: 18px;
+        font-family: sans-serif;
+        text-decoration: none;
+        color: #141e30;
+        border: 2px solid black;
+        letter-spacing: 2px;
+        text-align: center;
+        position: relative;
+        transition: all .35s;
+        border-radius: 4px;
+        cursor: pointer;
+        overflow: hidden;
+    }
+
+    .login-btn span {
+        position: relative;
+        z-index: 2;
+    }
+
+    .login-btn:after {
+        position: absolute;
+        content: "";
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 100%;
+        background: #2a6c56;
+        transition: all .35s;
+    }
+
+    .login-btn:hover {
+        color: #fff;
+    }
+
+    .login-btn:hover:after {
+        width: 100%;
+    }
+
+        * {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .calculator-container {
+            display: none;
+            /* Initially hide calculator */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-box" id="login-section">
+        <h2>Login Form</h2>
+        <form id="loginForm" action="#">
+            <div class="user-box">
+                <input type="text" id="username" required>
+                <label for="username">Username</label>
+            </div>
+            <div class="user-box">
+                <input type="password" id="password" required>
+                <label for="password">Password</label>
+            </div>
+            <button id="button" type="submit" class="login-btn">
+                <span>Submit</span>
+            </button>
+        </form>
+    </div>
+
+    <div class="calculator-container" id="calculator-section">
+        <div class="calculator">
+            <div class="display">
+                <div class="theme-container">
+                    <button class="theme-toggler"></button>
+                </div>
+                <div class="numbers">
+                    <div class="input"></div>
+                    <br /><br /><br /><br />
+                    <div class="output"></div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <button class="erase">C</button>
+                <button class="operation">(</button>
+                <button class="operation">)</button>
+                <button class="operation">+</button>
+
+                <button>7</button>
+                <button>8</button>
+                <button>9</button>
+                <button class="operation">-</button>
+
+                <button>4</button>
+                <button>5</button>
+                <button>6</button>
+                <button class="operation">*</button>
+
+                <button>1</button>
+                <button>2</button>
+                <button>3</button>
+                <button class="operation">/</button>
+
+                <button class="erase">↩</button>
+                <button>0</button>
+                <button>.</button>
+                <button class="equal">=</button>
+
+                <button class="logout">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Get username and password input values
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            // Here you can replace this with your authentication logic
+            // For demonstration, let's assume username is "admin" and password is "password"
+            if (username === "admin" && password === "password") {
+                // Authentication successful, hide login form and show calculator section
+                document.getElementById("login-section").style.display = "none";
+                document.getElementById("calculator-section").style.display = "block";
+                // Clear calculator display
+                clearCalculatorDisplay();
+            } else {
+                // Authentication failed, display an error message
+                alert("Invalid username or password. Please try again.");
+            }
+        });
+
+        const logoutButton = document.querySelector(".logout");
+
+        logoutButton.addEventListener("click", () => {
+            // Clear calculator display
+            clearCalculatorDisplay();
+            // Show login form and hide calculator section
+            document.getElementById("login-section").style.display = "block";
+            document.getElementById("calculator-section").style.display = "none";
+        });
+
+        // Function to clear calculator display
+        function clearCalculatorDisplay() {
+            document.querySelector(".input").innerText = "";
+            document.querySelector(".output").innerText = "";
+        }
+
+        const themeToggleBtn = document.querySelector(".theme-toggler");
+        const calculator_theme = document.querySelector(".calculator");
+
+        themeToggleBtn.addEventListener("click", (e) => {
+            calculator_theme.classList.toggle("light");
+        });
+
+        const input = document.querySelector(".input");
+        const output = document.querySelector(".output");
+        const buttons = document.querySelectorAll("button");
+
+        function timeOut() {
+            setTimeout(function() {
+                input.innerText = "";
+                output.innerText = "";
+            }, 1000);
+        }
+
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].addEventListener("click", calculate);
+        }
+
+        function calculate() {
+            let buttonText = this.innerText;
+            if (buttonText === "C") {
+                input.innerText = "Cleared";
+                output.innerText = "0";
+                timeOut();
+                input.style.animation = "";
+                output.style.animation = "";
+                return;
+            }
+
+            if (buttonText === "↩") {
+                input.textContent = input.textContent.substring(0, input.textContent.length - 1);
+                return;
+            }
+
+            if (buttonText === "=") {
+                try {
+                    output.innerText = eval(input.innerText);
+                } catch (error) {
+                    alert("Unable to Calculate");
+                    input.innerText = "Error";
+                    timeOut();
+                }
+
+                output.style.animation = "big 0.3s ease-in-out";
+                input.style.animation = "small 0.3s ease-in-out";
+                output.style.animationFillMode = "forwards";
+                input.style.animationFillMode = "forwards";
+            } else {
+                input.textContent += buttonText;
+                return;
+            }
+        }
+    </script>
+</body>
+
+</html>
